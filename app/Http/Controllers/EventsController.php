@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Workshop;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
+use DB;
 
 class EventsController extends BaseController
 {
@@ -101,7 +103,30 @@ class EventsController extends BaseController
      */
 
     public function getEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 1');
+        // throw new \Exception('implement in coding task 1');
+        try{
+
+            $workshop = Workshop::with('workshop_event')
+                ->get();      
+
+        
+            return response($workshop);
+
+
+        }
+
+        catch (Exception $e) {
+            return response($e->getMessage());
+                     
+          }
+
+    
+        
+            // return response()->json([
+            //     "workshop" => $workshop
+            //     ], 200);
+
+        
     }
 
 
@@ -179,6 +204,25 @@ class EventsController extends BaseController
      */
 
     public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
+        // throw new \Exception('implement in coding task 2');
+
+        try{
+
+            $current_time=date('Y-m-d H:i:s');
+
+            $workshop = Workshop::with('workshop_event')
+            ->where('created_at','>',$current_time)
+            ->get();      
+
+        
+            return response($workshop);
+
+
+        }
+
+        catch (Exception $e) {
+            return response($e->getMessage());
+                     
+          }
     }
 }
